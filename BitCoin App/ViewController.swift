@@ -11,7 +11,29 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        if let url = URL(string: "https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD,JPY,EUR") {
+            
+            
+            URLSession.shared.dataTask(with: url) { (data, response, error) in
+                
+                if error == nil {
+                    
+                    print("its working")
+                    
+                } else {
+                    
+                    print("we have an error")
+                    
+                }
+                
+                
+                
+            }.resume()
+            
+        }
+        
+        
     }
 
 
