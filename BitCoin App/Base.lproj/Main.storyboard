@@ -60,8 +60,17 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Bitcoin price Tracker" id="FG7-B5-dfq">
-                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="Q6w-uN-zez"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="Q6w-uN-zez">
+                            <connections>
+                                <action selector="refreshClicked:" destination="BYZ-38-t0r" id="QDk-7o-MLr"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="eurLabel" destination="5HC-ST-aIA" id="IK6-eT-9I6"/>
+                        <outlet property="usdLabel" destination="awo-KQ-rhY" id="plS-rf-qZy"/>
+                        <outlet property="yenLabel" destination="xBs-cw-tCS" id="3GH-FG-k1z"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
