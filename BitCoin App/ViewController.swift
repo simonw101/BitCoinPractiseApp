@@ -18,61 +18,86 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        getPrice()
+        //UserDefaults.standard.setValue("Hello There", forKey: "hey")
+        
+        //UserDefaults.standard.string(forKey: "hey")
+        
+        if let usd =  UserDefaults.standard.string(forKey: "USD") {
+            
+            usdLabel.text = usd
             
         }
         
-        func getPrice() {
+        if let eur =  UserDefaults.standard.string(forKey: "EUR") {
             
-            if let url = URL(string: "https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD,JPY,EUR") {
+            eurLabel.text = eur
+            
+        }
+        
+        if let jpy =  UserDefaults.standard.string(forKey: "JPY") {
+            
+            yenLabel.text = jpy
+            
+        }
+        
+        getPrice()
+        
+    }
+    
+    func getPrice() {
+        
+        if let url = URL(string: "https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD,JPY,EUR") {
+            
+            URLSession.shared.dataTask(with: url) { (data, response, error) in
                 
-                
-                URLSession.shared.dataTask(with: url) { (data, response, error) in
+                if error == nil {
                     
-                    if error == nil {
+                    if data != nil {
                         
-                        if data != nil {
+                        if let json = try? JSONSerialization.jsonObject(with: data!, options: []) as? [String:Double] {
                             
-                            if let json = try? JSONSerialization.jsonObject(with: data!, options: []) as? [String:Double] {
+                            DispatchQueue.main.async {
                                 
-                                DispatchQueue.main.async {
+                                if let usdPrice = json["USD"] {
                                     
-                                    if let usdPrice = json["USD"] {
-                                        
-                                        self.usdLabel.text = self.getStringFor(price: usdPrice, currencyCode: "USD")
-                                        
-                                        
-                                        
-                                    }
+                                    self.usdLabel.text = self.getStringFor(price: usdPrice, currencyCode: "USD")
                                     
-                                    if let eurPrice = json["EUR"] {
-                                        
-                                        self.eurLabel.text = self.getStringFor(price: eurPrice, currencyCode: "EUR")
-                                        
-                                    }
+                                    UserDefaults.standard.setValue(self.getStringFor(price: usdPrice, currencyCode: "USD") + "~", forKey: "USD")
                                     
-                                    if let yenPrice = json["JPY"] {
-                                        
-                                        self.yenLabel.text = self.getStringFor(price: yenPrice, currencyCode: "JPY")
-                                        
-                                    }
+                                }
+                                
+                                if let eurPrice = json["EUR"] {
+                                    
+                                    self.eurLabel.text = self.getStringFor(price: eurPrice, currencyCode: "EUR")
+                                    
+                                    UserDefaults.standard.setValue(self.getStringFor(price: eurPrice, currencyCode: "EUR") + "~", forKey: "EUR")
+                                    
+                                }
+                                
+                                if let yenPrice = json["JPY"] {
+                                    
+                                    self.yenLabel.text = self.getStringFor(price: yenPrice, currencyCode: "JPY")
+                                    
+                                    UserDefaults.standard.setValue(self.getStringFor(price: yenPrice, currencyCode: "JPY") + "~", forKey: "JPY")
                                     
                                 }
                                 
                             }
                             
-                            
                         }
                         
-                    } else {
-                        
-                        print("we have an error")
                         
                     }
                     
+                } else {
                     
+                    print("we have an error")
                     
-                }.resume()
+                }
+                
+                
+                
+            }.resume()
             
         }
         
